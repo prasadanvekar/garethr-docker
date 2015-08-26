@@ -97,6 +97,13 @@ class docker::service (
           content => template('docker/etc/sysconfig/docker-storage.erb'),
           notify  => Service['docker'],
         }
+      } else {
+        file { '/etc/systemd/system/docker.service':
+          ensure  => present,
+          force   => true,
+          content => template('docker/etc/systemd/system/docker.service.erb'),
+          notify  => Exec['docker-systemd-reload'];
+        }
       }
     }
     'Archlinux': {
